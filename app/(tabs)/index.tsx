@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import { useRouter } from 'expo-router';
+import { useState } from 'react';
 import {
   FlatList,
   KeyboardAvoidingView,
@@ -40,6 +41,7 @@ const initialMessages: Message[] = [
 export default function LiveSessionScreen() {
   const { width } = useWindowDimensions();
   const isMobile = width < 700;
+  const router = useRouter();
 
   // Temporary local state.
   // Later this will come from Supabase.
@@ -79,6 +81,12 @@ export default function LiveSessionScreen() {
       >
         {/* Header */}
         <View style={styles.header}>
+          <Pressable
+            onPress={() => router.push('./host')}
+            style={styles.hostButton}
+          >
+            <Text style={styles.hostButtonText}>Host Controls</Text>
+          </Pressable>
           <View>
             <Text style={styles.appTitle}>Your Presentation</Text>
             <Text style={styles.hostName}>Christopher</Text>
@@ -330,7 +338,7 @@ export default function LiveSessionScreen() {
           </ScrollView>
         )}
       </KeyboardAvoidingView>
-    </SafeAreaView>
+    </SafeAreaView >
   );
 }
 
@@ -362,6 +370,21 @@ const styles = StyleSheet.create({
     color: '#8d95a3',
     fontSize: 13,
     marginTop: 3,
+  },
+
+  hostButton: {
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: '#d8dde5',
+    backgroundColor: '#fff',
+  },
+
+  hostButtonText: {
+    fontSize: 13,
+    fontWeight: '700',
+    color: '#344054',
   },
 
   statusBadge: {
