@@ -13,6 +13,7 @@ import {
   useWindowDimensions,
   View,
 } from 'react-native';
+import { supabase } from '../../lib/supabase';
 
 type Message = {
   id: string;
@@ -49,6 +50,14 @@ export default function LiveSessionScreen() {
 
   const [messageText, setMessageText] = useState('');
   const [messages, setMessages] = useState(initialMessages);
+
+  const handleSignOut = async () => {
+  const { error } = await supabase.auth.signOut();
+
+  if (error) {
+    console.error('Sign out failed:', error.message);
+  }
+};
 
   const sendMessage = () => {
     const text = messageText.trim();
@@ -114,6 +123,15 @@ export default function LiveSessionScreen() {
               {isLive ? 'LIVE' : 'OFFLINE'}
             </Text>
           </View>
+          <Pressable
+    onPress={handleSignOut}
+    style={styles.hostButton}
+    accessibilityRole="button"
+    accessibilityLabel="Sign out"
+  >
+    <Text style={styles.hostButtonText}>Sign out</Text>
+  </Pressable>
+
         </View>
 
         {isLive ? (
