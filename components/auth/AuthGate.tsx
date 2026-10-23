@@ -98,11 +98,19 @@ setStatus('loading');
   data: { subscription },
 } = supabase.auth.onAuthStateChange((event, newSession) => {
   if (event === 'PASSWORD_RECOVERY') {
-  console.log('Y3A1: PASSWORD_RECOVERY event received');
-  isRecoveringPassword = true;
-  setStatus('recovering-password');
-  return;
-}
+    console.log('Y3A1: PASSWORD_RECOVERY event received');
+    isRecoveringPassword = true;
+    setStatus('recovering-password');
+    return;
+  }
+
+  if (isRecoveringPassword && event !== 'SIGNED_OUT') {
+    return;
+  }
+
+  if (event === 'SIGNED_OUT') {
+    isRecoveringPassword = false;
+  }
 
   setTimeout(() => {
     if (active) void checkAccess(newSession);
